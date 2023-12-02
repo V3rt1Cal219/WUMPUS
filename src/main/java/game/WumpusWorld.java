@@ -16,7 +16,7 @@ public class WumpusWorld {
     private static int pitY;
     private static int numWumpus;
     private static int arrows;
-    private static char direction = 'W'; // Starting direction
+    private static char direction = 'N'; // Starting direction  W-west  N- North  E-East  S-South
     private static boolean hasGold = false;
     private static String name;
 
