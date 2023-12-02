@@ -14,12 +14,12 @@ public class Player {
     public Player(String name, GameEngine world) {
         this.name = name;
         this.world = world.getWorld();
-        this.direction = 'E'; // Kezdetben keleti irány
+        this.direction = 'N'; // Starting direction  W-west  N- North  E-East  S-South
         initializeHeroPosition();
     }
 
     public void initializeHeroPosition() {
-        // Kezdeti pozíció beállítása random helyre a pályán
+        // Spawnpoint
         do {
             heroY = (int) (Math.random() * (GameEngine.getSize())) + 1;
             heroX = (int) (Math.random() * (GameEngine.getSize())) + 1;
@@ -31,8 +31,8 @@ public class Player {
     }
 
     public void performMove(char move) {
-        // Move the hero based on user input
-        world[heroY][heroX] = ' '; // Clear the current position
+        // Hero movement
+        world[heroY][heroX] = ' ';
 
         int prevHeroX = heroY;
         int prevHeroY = heroX;
@@ -65,22 +65,17 @@ public class Player {
                 System.out.println("Invalid move. Try again.");
         }
 
-        // Check for game over conditions here if needed
-
-
-
-
-        // Check for collisions
+        // Hit registration
         if (world[heroY][heroX] == 'U') {
-            System.out.println("Game over! The Wumpus got you!");
+            System.out.println("Wumpus clown got you, you dead.");
             System.exit(0);
         } else if (world[heroY][heroX] == 'G') {
-            System.out.println("Congratulations, " + name + "! You found the gold!");
+            System.out.println("You are rich , " + name + "! You found all the gold(s)!");
 
             // Mark that the hero has the gold
             hasGold = true;
         } else if (world[heroY][heroX] == 'P') {
-            System.out.println("Oh no! You fell into a pit and lost an arrow!");
+            System.out.println("You stuck in a backroom. The darkside got you. There is no escape from there.");
             arrows--;
 
             // Check if the hero is out of arrows
@@ -104,7 +99,7 @@ public class Player {
 
         // Check if the hero is back to the starting position with the gold
         if (hasGold && heroY == spawnX && heroX == spawnY) {
-            System.out.println("You win, " + name + "! You brought the gold back to the starting position!");
+            System.out.println("You win, " + name + ".");
             System.exit(0);
         }
     }
@@ -144,10 +139,10 @@ public class Player {
                 heroY = newHeroY;
                 heroX = newHeroX;
             } else {
-                System.out.println("Cannot move into a wall.");
+                System.out.println("You can not go through the wall.");
             }
         } else {
-            System.out.println("Cannot move outside the boundaries.");
+            System.out.println("You can not go outside the map");
         }
 
         // Update the world with the new hero position
@@ -156,15 +151,8 @@ public class Player {
 
 
 
-
-
-
-
-
-
-
     public void turnLeft() {
-        // Balra forgás esetén változtassa meg az irányt
+        // Movement left turn
         switch (direction) {
             case 'N':
                 direction = 'W';
@@ -185,7 +173,7 @@ public class Player {
     }
 
     public void turnRight() {
-        // Jobbra forgás esetén változtassa meg az irányt
+        // Movement right turn
         switch (direction) {
             case 'N':
                 direction = 'E';
@@ -206,19 +194,19 @@ public class Player {
     }
 
     private void turnAround() {
-        // Fordulás 180 fokkal (két lépés balra)
+        // 2x left turn
         turnLeft();
         turnLeft();
     }
 
     public void shootArrow() {
-        // Lövés esetén csökkentse a nyilak számát
+        // Minus the arrow counter if it need
         if (arrows > 0) {
             arrows--;
 
             System.out.println("You shot an arrow! Arrows left: " + arrows);
 
-            // Ellenőrizze, hogy a Wumpus eltalálta-e a lövés
+            // Hit registration
             int arrowX = heroY;
             int arrowY = heroX;
 
@@ -240,16 +228,13 @@ public class Player {
                         break;
                 }
 
-                // Ha a nyíl eléri a pálya szélét, akkor eltűnik
+                // Arrow hit the W border
                 if (arrowX <= 0 || arrowX >= GameEngine.getSize() || arrowY <= 0 || arrowY >= GameEngine.getSize()) {
-                    System.out.println("Arrow missed and disappeared!");
+                    System.out.println("You missed the wumpus and shoot across the wall. Nice aim bro.");
                     break;
                 }
-
-                // Ha a nyíl eltalál egy Wumpust, akkor
-                // a Wumpus helyén megjelenik egy 'X'
                 if (world[arrowX][arrowY] == 'U') {
-                    System.out.println("Arrow hit the Wumpus! Wumpus eliminated!");
+                    System.out.println("Nice aim, You killed the Wumpus.");
                     world[arrowX][arrowY] = 'X';
                     break;
                 }

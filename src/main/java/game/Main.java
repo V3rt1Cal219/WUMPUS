@@ -7,11 +7,12 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Wumpus World Menu:");
+            System.out.println("Wumpus main menu");
             System.out.println("1. Start Game");
-            System.out.println("2. Quit");
+            System.out.println("2. Load from database");
+            System.out.println("3. Quit");
 
-            System.out.print("Enter your choice (1 or 2): ");
+            System.out.print("Enter your choice (1 or 3.     2. is under maintenance): ");
             int choice = scanner.nextInt();
 
 
@@ -23,13 +24,13 @@ public class Main {
                     System.out.println("Goodbye!");
                     System.exit(0);
                 default:
-                    System.out.println("Invalid choice. Please enter a number between 1 and 2.");
+                    System.out.println("Invalid choice. Please enter a number between 1 or 3.");
             }
         }
     }
 
     private static void startGame() {
-        System.out.println("Starting Wumpus World Game...");
+        System.out.println("Starting Wumpus Game..");
         new WumpusWorld();
     }
 }

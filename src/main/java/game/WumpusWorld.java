@@ -16,21 +16,21 @@ public class WumpusWorld {
     private static int pitY;
     private static int numWumpus;
     private static int arrows;
-    private static char direction = 'E'; // Kezdetben keleti irány
+    private static char direction = 'W'; // Starting direction
     private static boolean hasGold = false;
     private static String name;
 
 
     public WumpusWorld() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What is your name?");
+        System.out.println("Write your name: ");
         name = scanner.nextLine();
-        // Pálya készítés 6-20
+        // Map design between 6-20
         do {
             System.out.println("Please give a number between 6 and 20.): ");
             size = scanner.nextInt();
         } while (size < 6 || size > 20);
-        // Wumpusok lehejezése
+        // Wumpus spawn rate
         if (size <= 8) {
             numWumpus = 1;
         } else if (size <= 14) {
@@ -43,23 +43,23 @@ public class WumpusWorld {
         initializeWorld();
         printWorld();
         while (true) {
-            System.out.println("Enter your move (W to move, Q to quit, R/L to turn, E to shoot arrow): ");
+            System.out.println("Select a movement | Q- quit | r--l turn | E to shoot arrow): ");
             char move = scanner.next().charAt(0);
             if (move == 'Q' || move == 'q') {
                 System.out.println("Game over. Thanks for playing!");
                 break;
             } else if (move == 'R' || move == 'r') {
-                // Jobbra forgás esetén változtassa meg az irányt
+                // Right turn
                 turnRight();
-                printWorld(); // Pálya kiírása irányváltoztatás után
+                printWorld(); // New orientation mapdraw
             } else if (move == 'L' || move == 'l') {
-                // Balra forgás esetén változtassa meg az irányt
+                // Left turn
                 turnLeft();
-                printWorld(); // Pálya kiírása irányváltoztatás után
+                printWorld(); // New orientation mapdraw
             } else if (move == 'E' || move == 'e') {
-                // Nyíl kilövése az aktuális irányba
+                // Shooting the arrow the right direction
                 shootArrow();
-                printWorld(); // Pálya kiírása lövés után
+                printWorld(); // New orientation mapdraw
             } else {
                 performMove(move);
                 printWorld();
@@ -68,7 +68,7 @@ public class WumpusWorld {
     }
 
     private static void initializeWorld() {
-        // A pálya mérete a falak közötti területtel
+        // Inside mapsize
         int worldSize = size + 2;
         world = new char[worldSize][worldSize];
 
@@ -93,7 +93,7 @@ public class WumpusWorld {
         spawnX = heroX;
         spawnY = heroY;
 
-        // Place the Wumpusokat a megadott számban véletlenszerű pozíciókra
+        // Placing the Wumpus to the right position
         for (int k = 0; k < numWumpus; k++) {
             int wumpusX;
             int wumpusY;
@@ -132,8 +132,8 @@ public class WumpusWorld {
             }
             System.out.println();
         }
-        System.out.println("Direction: " + direction); // Kiírja az aktuális irányt
-        System.out.println("Arrows: " + arrows); // Kiírja a nyilak számát
+        System.out.println("Direction: " + direction); // Display the current direction
+        System.out.println("Arrows: " + arrows); // Display the currecnt arrow used
         System.out.println();
     }
 
@@ -144,7 +144,7 @@ public class WumpusWorld {
         int prevHeroX = heroX;
         int prevHeroY = heroY;
 
-        // Mozgás az aktuális irányba
+        // Movement
         switch (move) {
             case 'W':
             case 'w':
@@ -165,7 +165,6 @@ public class WumpusWorld {
             case 'Q':
             case 'q':
                 System.out.println("Game over. Thanks for playing!");
-             //   Main.database.adatbazisbaMent(name, arrows); // Mentés az adatbázisba
                 System.exit(0);
             default:
                 performMove(move);
@@ -174,15 +173,15 @@ public class WumpusWorld {
 
         // Check for collisions
         if (world[heroX][heroY] == 'U') {
-            System.out.println("Game over! The Wumpus got you!");
+            System.out.println("Wumpus clown got you, you dead.");
             System.exit(0);
         } else if (world[heroX][heroY] == 'G') {
-            System.out.println("Congratulations, " + name + "! You found the gold!");
+            System.out.println("You are rich , " + name + "! You found all the gold(s)!");
 
-            // Mark that the hero has the gold
+            // Gold check
             hasGold = true;
         } else if (world[heroX][heroY] == 'P') {
-            System.out.println("Oh no! You fell into a pit and lost an arrow!");
+            System.out.println("You stuck in a backroom. The darkside got you. There is no escape from there.");
             arrows--;
 
             // Check if the hero is out of arrows
@@ -201,19 +200,19 @@ public class WumpusWorld {
             }
         }
 
-        // Update the hero's position
+        // Hero new location
         world[heroX][heroY] = 'H';
 
         // Check if the hero is back to the starting position with the gold
         if (hasGold && heroX == spawnX && heroY == spawnY) {
-            System.out.println("You win, " + name + "! You brought the gold back to the starting position!");
+            System.out.println("You win, " + name + "!");
             System.exit(0);
         }
     }
 
 
     private static void moveForward() {
-        // Mozgás az aktuális irányba
+        // Movement forward
         switch (direction) {
             case 'N':
                 if (heroX > 1 && world[heroX - 1][heroY] != 'W') {
@@ -241,7 +240,7 @@ public class WumpusWorld {
     }
 
     private static void turnLeft() {
-        // Balra forgás esetén változtassa meg az irányt
+        // Movement w/ left turn
         switch (direction) {
             case 'N':
                 direction = 'W';
@@ -262,7 +261,7 @@ public class WumpusWorld {
     }
 
     private static void turnRight() {
-        // Jobbra forgás esetén változtassa meg az irányt
+        // Movement w/ right turn
         switch (direction) {
             case 'N':
                 direction = 'E';
@@ -283,19 +282,19 @@ public class WumpusWorld {
     }
 
     private static void turnAround() {
-        // Fordulás 180 fokkal (két lépés balra)
+        // 2x left turn
         turnLeft();
         turnLeft();
     }
 
     private static void shootArrow() {
-        // Lövés esetén csökkentse a nyilak számát
+        // Arrow minus if you shoot
         if (arrows > 0) {
             arrows--;
 
             System.out.println("You shot an arrow! Arrows left: " + arrows);
 
-            // Ellenőrizze, hogy a Wumpus eltalálta-e a lövés
+            // Hit check
             int arrowX = heroX;
             int arrowY = heroY;
 
@@ -317,16 +316,16 @@ public class WumpusWorld {
                         break;
                 }
 
-                // Ha a nyíl eléri a pálya szélét, akkor eltűnik
+                // Arrow disappear
                 if (arrowX <= 0 || arrowX >= size || arrowY <= 0 || arrowY >= size) {
-                    System.out.println("Arrow missed and disappeared!");
+                    System.out.println("You missed the wumpus and shoot across the wall. Nice aim bro.");
                     break;
                 }
 
-                // Ha a nyíl eltalál egy Wumpust, akkor
-                // a Wumpus helyén megjelenik egy 'X'
+                // Wumpus got a shoot
+
                 if (world[arrowX][arrowY] == 'U') {
-                    System.out.println("Arrow hit the Wumpus! Wumpus eliminated!");
+                    System.out.println("Nice aim, You killed the Wumpus.");
                     world[arrowX][arrowY] = 'X';
                     break;
                 }

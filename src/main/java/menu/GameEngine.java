@@ -15,11 +15,11 @@ class GameEngine {
     }
 
     public void initializeWorld(Player player) {
-        // A pálya mérete a falak közötti területtel
+        // Inside mapsize
         int worldSize = size + 2;
         world = new char[worldSize][worldSize];
 
-        // Initialize the world with walls and empty cells
+        // Empty space between the walls
         for (int i = 0; i < worldSize; i++) {
             for (int j = 0; j < worldSize; j++) {
                 if (i == 0 || i == worldSize - 1 || j == 0 || j == worldSize - 1) {
@@ -33,7 +33,7 @@ class GameEngine {
         player.initializeHeroPosition();
         world[player.getHeroY()][player.getHeroX()] = 'H';
 
-        // Place the Wumpusokat a megadott számban véletlenszerű pozíciókra
+
         for (int k = 0; k < numWumpus; k++) {
             int wumpusX;
             int wumpusY;
@@ -42,7 +42,7 @@ class GameEngine {
                 wumpusY = (int) (Math.random() * (size)) + 1;
             } while (world[wumpusX][wumpusY] == 'W' || (wumpusX == player.getHeroY() && wumpusY == player.getHeroX()));
 
-            world[wumpusX][wumpusY] = 'U'; // Wumpus 'U'-val jelölve
+            world[wumpusX][wumpusY] = 'U';
         }
 
         // Place the gold in an empty random position
@@ -68,7 +68,7 @@ class GameEngine {
         char columnLabel = 'A';
 
         // Print column labels
-        System.out.print("  "); // Üres hely az első sor és oszlop jelzéseinek
+        System.out.print("  ");
         for (int i = 1; i <= size; i++) {
             System.out.print(columnLabel++ + " ");
         }
@@ -84,23 +84,10 @@ class GameEngine {
             System.out.println();
         }
 
-        System.out.println("Direction: " + Player.getDirection());
-        System.out.println("Arrows: " + Player.getArrows());
+        System.out.println("Direction: " + Player.getDirection()); // Current direction
+        System.out.println("Arrows: " + Player.getArrows()); // Current arrow left
         System.out.println();
     }
-
-   /* public void printWorld() {
-        // Print the current state of the world
-        for (int i = 0; i < world.length; i++) {
-            for (int j = 0; j < world.length; j++) {
-                System.out.print(world[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("Direction: " + Player.getDirection()); // Kiírja az aktuális irányt
-        System.out.println("Arrows: " + Player.getArrows()); // Kiírja a nyilak számát
-        System.out.println();
-    }*/
 
     public char[][] getWolrd() {
         return world;

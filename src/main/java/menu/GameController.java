@@ -8,19 +8,19 @@ public class GameController {
 
     public GameController() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What is your name?");
+        System.out.println("Write your name: ");
         String name = scanner.nextLine();
 
-        // Kérje be a pálya méretét 6 és 20 között
+        // Mapsize 6-20
         int size;
         do {
-            System.out.println("Please set the map's size (N x N, excluding walls, between 6 and 20): ");
+            System.out.println("Please creater the map write between 6-20");
             size = scanner.nextInt();
         } while (size < 6 || size > 20);
 
         world = new GameEngine(size);
         player = new Player(name, world);
-        // Állítsa be a Wumpusok számát a pálya mérete alapján
+        // Wumpus config to the mapsize
         if (size <= 8) {
             GameEngine.setNumWumpus(1);
         } else if (size <= 14) {
@@ -28,7 +28,7 @@ public class GameController {
         } else {
             GameEngine.setNumWumpus(3);
         }
-        // Állítsa be a nyilak számát a Wumpusok számával
+        // Arrow config to the wumpus
         Player.setArrows(GameEngine.getNumWumpus());
         world.initializeWorld(player);
     }
@@ -40,7 +40,7 @@ public class GameController {
         while (!gameOver) {
             world.printWorld(); // Print the map once
 
-            System.out.println("Enter your move (W to move, Q to quit, R/L to turn, E to shoot arrow): ");
+            System.out.println("Select a movement | Q- quit | r--l turn | E to shoot arrow): ");
             char move = scanner.next().charAt(0);
 
             switch (move) {
@@ -69,7 +69,6 @@ public class GameController {
                     System.out.println("Invalid move. Try again.");
             }
 
-            // Check for game over conditions here if needed
         }
     }
 
