@@ -1,5 +1,7 @@
 package game;
 
+import menu.GameController;
+
 import java.util.Scanner;
 public class Main {
 
@@ -29,7 +31,7 @@ public class Main {
         }
     }
 
-    private static void startGame() {
+    static void startGame() {
         System.out.println("Starting Wumpus Game..");
         new WumpusWorld();
     }
